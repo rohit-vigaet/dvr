@@ -1,0 +1,66 @@
+# ERROR_LOG_VideoAPA_v1.01
+
+
+ERROR FREEZE-1A (resolved)
+
+
+
+
+
+ERROR MTH-1A fixed as of 7-7-2020:
+(*Note This is a multi threading error)
+
+
+Problem with toggleRecording() function and runTimer() function in launcher.py and exp_updater.py where runTimer() is called
+
+Description: The error occurs where the 'self.endRunThread' is being started but then interupted to end prematurely. Further more the boolean values tied to self.recording are sometimes being changed to True
+sometimes after the timer already begins which should not happen. 
+
+*Update on Error MTH-1A: There were two threads that were accessing the toggleRecording() function both timer threads, one being self.endRunThread, and one thread being instantiated in startRecordingAtTime function called 'self.startRunThread'
+The 'self.startRunThread = threading.Timer(delay, self.toggleRecording)' was being initiated and then self.endRunThread was being initiated afterwords essentially making two threads that would then change the logical value of self.recording indeterminently.
+self.recording boolean value was used extensively and because of the threading error it would cause the toggleRecording function to be called multiple times thus at times ending the recording early.
+
+
+
+
+
+ERROR SYNT-1A fixed as of 7-1-20
+
+Error found in file C:\Users\noahc\Downloads\Repository_For_Video_APA-6-23-2020\VideoAPA_For_Host_PC\acquisition\client\source\client.py
+
+
+
+The ERROR itself: 
+
+C:\Users\noahc\Downloads\Repository_For_Video_APA-6-23-2020\VideoAPA_For_Host_PC\acquisition>"runacquisition - Shortcut.lnk"
+Qt: Untested Windows version 10.0 detected!
+Press enter r to toggle recording
+('192.168.1.100', 58478): Cannot parse message set dimension(i:1920, i:1080: No such handler set dimension
+('192.168.1.103', 49210): Cannot parse message set dimension(i:1920, i:1080: No such handler set dimension
+('192.168.1.102', 45196): Cannot parse message set dimension(i:1920, i:1080: No such handler set dimension
+Traceback (most recent call last):
+  File "C:\Users\noahc\Downloads\VideoAPA-my-own-modified-WORKS\acquisition\scorhe_aquisition_tools\bundle.py", line 179, in setCamera
+    oldCam = self.lists["cage cameras"].currentItem().text()
+AttributeError: 'NoneType' object has no attribute 'text'
+Traceback (most recent call last):
+  File "C:\Users\noahc\Downloads\VideoAPA-my-own-modified-WORKS\acquisition\scorhe_aquisition_tools\bundle.py", line 308, in exitBundler
+    self.controllerThread.server.sendStopPreviewingMessages()
+  File "C:\Users\noahc\Downloads\VideoAPA-my-own-modified-WORKS\acquisition\scorhe_server\server.py", line 694, in sendStopPreviewingMessages
+    'Cannot stop previewing when not previewing')
+scorhe_server.server.RecordingOrStreamException: Cannot stop previewing when not previewing
+Traceback (most recent call last):
+  File "C:\Users\noahc\Downloads\VideoAPA-my-own-modified-WORKS\acquisition\scorhe_aquisition_tools\cam_set.py", line 108, in saveSettings
+    self.setSettings()
+  File "launcher.py", line 668, in setSettings
+    clientOptions.vflip = self.settings['vflip']
+  File "C:\Users\noahc\Downloads\VideoAPA-my-own-modified-WORKS\acquisition\scorhe_server\server.py", line 288, in vflip
+    t.update(value['camera'])
+TypeError: 'bool' object is not subscriptable
+('192.168.1.103', 49210): Unable to set frame rate of camera to 15: Recording is currently running
+
+
+
+
+
+
+
